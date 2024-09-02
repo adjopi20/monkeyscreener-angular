@@ -1,0 +1,48 @@
+.container {
+  margin-bottom: 1rem;
+}
+
+.menu-label{
+  margin-bottom: 1rem;
+}
+
+.sort{
+  align-items: right;
+  justify-content: right;
+}
+
+.select{
+  width: 10rem;
+}
+
+
+.fixed-grid {
+  display: flex;
+  flex-wrap: wrap; /* Enable wrapping of items */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.grid {
+  flex: 1 1 20%; /* Set a flexible basis for each item */
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.cell {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    flex: 1 1 50%; /* Adjust basis for medium screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    flex: 1 1 100%; /* Adjust basis for small screens */
+  }
+}
