@@ -21,7 +21,7 @@ import { ClickOutsideDirective } from '../../../shared/directive/click-outside-d
     SearchPipe,
     NgIf,
     ClickOutsideDirective,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
@@ -33,7 +33,11 @@ export class NavbarComponent {
   data: any[] = []; // Your original data array
   showDropdown: boolean = false;
 
-  constructor(private apiService: FlaskApiService, private router: Router, private cdr:ChangeDetectorRef) {}
+  constructor(
+    private apiService: FlaskApiService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.getStocks();
@@ -44,14 +48,6 @@ export class NavbarComponent {
     try {
       const response = await firstValueFrom(this.apiService.getStockList());
       this.data = response.data;
-      console.log('navbar data1', this.data);
-
-      // this.filteredData = [...this.data];
-      // for (const item of data1) {
-      //   this.data.push(item);
-      // }
-      console.log('navbar data2', this.data);
-      console.log('navbar filteredData', this.filteredData);
     } catch (error) {
       console.error('nav', error);
     } finally {
@@ -74,9 +70,7 @@ export class NavbarComponent {
       this.showDropdown = true;
       console.log('filteredData', this.filteredData);
       this.cdr.detectChanges();
-      
     }
-
   }
 
   selectStock(stock: any) {
@@ -91,6 +85,4 @@ export class NavbarComponent {
     this.showDropdown = false;
     this.searchText = '';
   }
-
-  
 }

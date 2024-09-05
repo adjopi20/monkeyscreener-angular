@@ -198,6 +198,23 @@ export class StockInfoComponent {
   }
 
   receiveChangeIndustry(event: string) {
+    // for (let item of this.rawData) {
+    //   if (this.currentSector === item['sector']) {
+    //     this.dataInASector.push(item);
+    //   }
+    // }
+    // this.industryList = [
+    //   ...new Set(this.dataInASector.map((item: any) => item['industry'])),
+    // ];
+    // this.currentIndustry = this.industryList[0];
+
+    // for (let item of this.dataInASector) {
+    //   if (
+    //     this.currentSector === item['sector'] &&
+    //     this.currentIndustry === item['industry']
+    //   )
+    //     this.symbolList.push(item['symbol']);
+    // }
     this.currentIndustry = this.currentIndustry === event ? undefined : event;
     this.getAllStock();
   }
