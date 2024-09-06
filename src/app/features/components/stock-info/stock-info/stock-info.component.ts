@@ -36,6 +36,8 @@ export class StockInfoComponent {
   listingBoard: any[] = [];
   recommendation: any[] = [];
 
+  dataInASector: any[] = [];
+
   total: number = 0;
   currentPage: number = 1;
   limit: number = 0;
@@ -59,6 +61,8 @@ export class StockInfoComponent {
   currentMaxDividendRate?: number;
   currentSortBy?: string;
   currentOrder?: string;
+
+
 
   constructor(
     @SkipSelf() private apiService: FlaskApiService,
@@ -192,6 +196,7 @@ export class StockInfoComponent {
 
   receiveChangeSector(event: string) {
     this.currentSector = this.currentSector === event ? undefined : event;
+    
     this.getAllStock();
   }
 

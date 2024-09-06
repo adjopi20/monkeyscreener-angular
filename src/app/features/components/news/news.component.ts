@@ -17,19 +17,15 @@ export class NewsComponent {
   @Input() resolution: any = {};
   @Input() relatedTickers: any[] = [];
   @Input() mainRelatedTickers: any[] = [];
-  @Input() showAdditionalSection: boolean = true; // Add this input property
+  @Input() showAdditionalSection: boolean = true;
   @Input() titleSizeMain: string = 'is-5';
   @Input() subtitleSizeMain: string = 'is-5';
   @Input() titleSizeSubMain: string = 'is-6';
   @Input() subtitleSizeSubMain: string = 'is-6';
 
-
-  slicedMainNews: any[]=[];
-  slicedNews: any[]=[];
-  slicedNewsImg: any[]=[];
-
-  @ContentChild(NewsDirectiveDirective, {read: TemplateRef}) newsTemplate?: any;
-
+  slicedMainNews: any[] = [];
+  slicedNews: any[] = [];
+  slicedNewsImg: any[] = [];
 
   constructor(private apiService: FlaskApiService) {}
 
@@ -45,18 +41,7 @@ export class NewsComponent {
         this.slicedNews = this.allNews.slice(5);
         this.slicedMainNews = this.allNews.slice(1, 5);
 
-        // getImagesForItem(item)
-
-        
-        // for(let item of this.slicedNews){
-        //   if (item.thumbnail && item.thumbnail.resolutions){
-        //     this.slicedNewsImg.push(item.thumbnail.resolutions);
-        //   } else{
-        //     this.slicedNewsImg.push([])
-        //   }
-        // }
-
-        this.relatedTickers=data.relatedTickers;
+        this.relatedTickers = data.relatedTickers;
         for (let item of this.allNews) {
           if (item['thumbnail']) {
             this.mainNews = item;
@@ -73,13 +58,7 @@ export class NewsComponent {
     });
   }
 
-  getImgForItem(item: any){
-    // for(let i = 0; i < 2; i++){
-    //   if(item.thumbnail?.resolutions[i]){
-    //     return item.thumbnail?.resolutions[i]
-    //   }
-    // }
+  getImgForItem(item: any) {
     return item.thumbnail?.resolutions || [];
-   
   }
 }

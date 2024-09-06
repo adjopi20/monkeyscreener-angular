@@ -1,53 +1,5 @@
-<section class="hero is-halfheight has-background-black" *ngFor="let item of colors; let i = index" [ngClass]="item" [ngStyle]="{ display: currentIndex === i ? 'block' : 'none' }">
-  <!-- <div>[ngStyle]="{display: currentIndex === i ? -color: black;}"</div> -->
-  <div class="hero-body">
-    <div class="container slidable-container" style="padding-top: 5rem">
-      <div class="slidable-content">
-        <div
-          *ngFor="let item of items; let i = index"
-          class="presentation-item "
-          style="display:flex; justify-content: center; align-items: center; "
-        >
-          <img
-            [src]="item"
-            alt="cupid"
-            style="max-height: 25rem; "
-            [ngStyle]="{ display: currentIndex === i ? 'block' : 'none' }"
-          />
-        </div>
-      </div>
-    </div>
+<div class="container is-fluid" style="margin-top: 3rem;margin-bottom: 3rem;"><app-overview ></app-overview>
+</div>
 
-    <!-- <div class="">
-      <p class="title ">Half height hero</p>
-      <p class="subtitle">Half height subtitle</p>
-    </div> -->
-  </div>
+  
 
-  <div class="hero-foot">
-    <nav class="tabs is-boxed is-fullwidth">
-      <div class="container">
-        <ul>
-          <li [ngClass]="{ 'is-active': feature === 'overview' }">
-            <a (click)="onTabChange('overview')">Overview</a>
-          </li>
-          <li [ngClass]="{ 'is-active': feature === 'news' }">
-            <a (click)="onTabChange('news')">News</a>
-          </li>
-          <li [ngClass]="{ 'is-active': feature === 'info' }">
-            <a (click)="onTabChange('info')">All Info</a>
-          </li>
-          <li [ngClass]="{ 'is-active': feature === 'histogram' }">
-            <a (click)="onTabChange('histogram')">Metrics Histogram</a>
-          </li>
-          <li [ngClass]="{ 'is-active': feature === 'financials' }">
-            <a (click)="onTabChange('financials')">Financials</a>
-          </li>
-          <!-- <li><a>Layout</a></li> -->
-        </ul>
-      </div>
-    </nav>
-  </div>
-</section>
-
-<app-dashboard-canvas [feature]="feature"></app-dashboard-canvas>

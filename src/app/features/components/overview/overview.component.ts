@@ -4,6 +4,7 @@ import {
   DecimalPipe,
   getLocaleFirstDayOfWeek,
   KeyValuePipe,
+  NgClass,
   NgFor,
   NgIf,
   PercentPipe,
@@ -32,6 +33,7 @@ import { Router, RouterLink } from '@angular/router';
     LoadingIndicatorComponent,
     LoadingComponent,
     RouterLink,
+    NgClass,
   ],
   providers: [DatePipe],
   templateUrl: './overview.component.html',
@@ -40,12 +42,12 @@ import { Router, RouterLink } from '@angular/router';
 export class OverviewComponent {
   stocks: any[] = [];
   historical: any[] = [];
-  topGainers: any[] = [];
+  dailyGainers: any[] = [];
+  dailyLosers: any[] = [];
   weeklyGainers: any[] = [];
   weeklyLosers: any[] = [];
   monthlyGainers: any[] = [];
   monthlyLosers: any[] = [];
-  topLosers: any[] = [];
   topDividendRate: any[] = [];
   topDividendYield: any[] = [];
   topEarnings: any[] = [];
@@ -56,6 +58,22 @@ export class OverviewComponent {
   topEarningsGrowth: any[] = [];
   latestPrice: any = {};
 
+  allNews: any[] = [];
+  mainNews: any;
+  resolutions: any[] = [];
+  resolution: any = {};
+  relatedTickers: any[] = [];
+  mainRelatedTickers: any[] = [];
+  showAdditionalSection: boolean = true;
+  titleSizeMain: string = 'is-5';
+  subtitleSizeMain: string = 'is-5';
+  titleSizeSubMain: string = 'is-6';
+  subtitleSizeSubMain: string = 'is-6';
+
+  slicedMainNews: any[] = [];
+  slicedNews: any[] = [];
+  slicedNewsImg: any[] = [];
+
   constructor(
     private apiService: FlaskApiService,
     private datePipe: DatePipe,
@@ -64,8 +82,10 @@ export class OverviewComponent {
   ) {}
 
   ngOnInit() {
-    this.getHistoricalPrice();
+    // this.getHistoricalPrice();
+    this.getTopGainer();
     this.getStocks();
+    this.getNews();
   }
 
   async getStocks() {
@@ -79,11 +99,11 @@ export class OverviewComponent {
       this.topDividendRate = this.stocks
         .filter((item) => item.dividendRate)
         .sort((a, b) => b.dividendRate - a.dividendRate)
-        .slice(0, 12);
+        .slice(0, 10);
       this.topDividendYield = this.stocks
         .filter((item) => item.dividendYield)
         .sort((a, b) => b.dividendYield - a.dividendYield)
-        .slice(0, 12);
+        .slice(0, 10);
       this.topMarketCaps = this.stocks
         .filter((item) => item.marketCap)
         .sort((a, b) => b.marketCap - a.marketCap)
@@ -108,30 +128,22 @@ export class OverviewComponent {
     }
   }
 
-  async getHistoricalPrice() {
+  async getTopGainer() {
     try {
       console.log('getHistoricalPrice1');
 
-      // this.apiService.getHistoricalPrice('1mo')
-      // .subscribe({
-      //   next: (data: any) => {
-      //     this.historical = data;
-      //     console.log('getHistoricalPrice2', data);
-
-      //   },
-      //   error: (error) => console.error(error),
-      //   complete: () => console.log('complete'),
-      // });
-
-      const data = await firstValueFrom(
-        this.apiService.getHistoricalPrice('1mo')
-      );
-      this.historical = data.data;
+      const data = await firstValueFrom(this.apiService.getTopGainer('1mo'));
+      // this.historical = data.data;
       console.log('historical1', this.historical.length);
 
-      this.topGainerss();
-      this.WeeklyGainers();
-      this.MonthlyGainers();
+      this.dailyGainers = data.dailyGainers
+      this.dailyLosers = data.dailyLosers
+      this.weeklyGainers = data.weeklyGainers
+      this.weeklyLosers = data.weeklyLosers
+      this.monthlyGainers = data.monthlyGainers
+      this.monthlyLosers = data.monthlyLosers
+      this.topVolumes = data.topVolumes
+
     } catch (error: any) {
       console.error(error);
     } finally {
@@ -140,130 +152,36 @@ export class OverviewComponent {
     }
   }
 
-  topGainerss() {
-    let list = [];
-    console.log('Stocks:', this.historical);
+  getNews() {
+    this.apiService.getNews().subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.allNews = data;
+        this.slicedNews = this.allNews.slice(5);
+        this.slicedMainNews = this.allNews.slice(1, 5);
 
-    for (let item of this.historical) {
-      const close = item.history.Close;
-      const volumes = item.history.Volume;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[dates.length - 3];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const volume = volumes[end];
-      const companyName = item.metadata.longName;
-      // if (item.metadata.symbol.toLowerCase() === )
+        this.relatedTickers = data.relatedTickers;
+        for (let item of this.allNews) {
+          if (item['thumbnail']) {
+            this.mainNews = item;
+            this.resolutions = item.thumbnail.resolutions;
+            this.resolution = this.resolutions[0] || {};
+            this.mainRelatedTickers = item.relatedTickers;
 
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-        lastDayVolume: volume,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.topGainers = sortedPercentChange.slice(0, 10);
-    this.topLosers = sortedPercentChange.slice(list.length - 10, list.length);
-
-    const sortedVolume = list.sort(
-      (a: any, b: any) => b.lastDayVolume - a.lastDayVolume
-    );
-    this.topVolumes = sortedVolume.slice(0, 12);
+            break;
+          }
+        }
+      },
+      error: (error) => console.error('Error news:', error),
+      complete: () => console.log('complete'),
+    });
   }
 
-  WeeklyGainers() {
-    let list = [];
-
-    for (let item of this.historical) {
-      const close = item.history.Close;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[dates.length - 7];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const companyName = item.metadata.longName;
-
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.weeklyGainers = sortedPercentChange.slice(0, 10);
-    this.weeklyLosers = sortedPercentChange.slice(
-      list.length - 10,
-      list.length
-    );
-  }
-
-  MonthlyGainers() {
-    let list = [];
-
-    for (let item of this.historical) {
-      const close = item.history.Close;
-      const volumes = item.history.Volume;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[1];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const companyName = item.metadata.longName;
-
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.monthlyGainers = sortedPercentChange.slice(0, 10);
-    this.monthlyLosers = sortedPercentChange.slice(
-      list.length - 10,
-      list.length
-    );
+  getImgForItem(item: any) {
+    return item.thumbnail?.resolutions || [];
   }
 
   selectStock(stock: any) {
-    // this.searchText = `${stock.company_name} (${stock.symbol})`;
-    // this.showDropdown = false;
-    // Navigate to the stock details page
     this.router.navigate(['/stock', stock.symbol]);
-    // this.searchText = ''; // Clear the search input
   }
 }

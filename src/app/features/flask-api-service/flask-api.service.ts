@@ -142,4 +142,9 @@ export class FlaskApiService {
   getStockAction(symbol: string): Observable<any> {
     return this.http.get(`${this.url}/actions/${symbol}`);
   }
+
+  //=========================================================================================
+  getTopGainer(period: string): Observable<any> {
+    return this.http.get(`${this.url}/top-gainer/${period}`);
+  }
 }
