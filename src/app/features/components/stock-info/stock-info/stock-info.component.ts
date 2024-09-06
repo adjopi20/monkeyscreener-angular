@@ -21,7 +21,7 @@ import { RouterLink } from '@angular/router';
     PaginationComponent,
     FilterContainerComponent,
     CurrencyPipe,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './stock-info.component.html',
   styleUrl: './stock-info.component.scss',
@@ -152,21 +152,19 @@ export class StockInfoComponent {
   }
 
   getFilterOptions() {
-    this.apiService
-      .getFilterOptions()
-      .subscribe({
-        next: (data: any) => {
-          this.listingBoard = data.listingBoard;
-          this.sector = data.sector;
-          this.recommendation = data.recommendationKey;
+    this.apiService.getFilterOptions().subscribe({
+      next: (data: any) => {
+        this.listingBoard = data.listingBoard;
+        this.sector = data.sector;
+        this.recommendation = data.recommendationKey;
 
-          // console.log(this.listingBoard);
-          // console.log(this.sector);
-          // console.log(this.recommendation);
-        },
-        error: (error) => console.error(error),
-        complete: () => console.log('complete'),
-      });
+        // console.log(this.listingBoard);
+        // console.log(this.sector);
+        // console.log(this.recommendation);
+      },
+      error: (error) => console.error(error),
+      complete: () => console.log('complete'),
+    });
   }
 
   limitDisplayedData() {
@@ -198,23 +196,6 @@ export class StockInfoComponent {
   }
 
   receiveChangeIndustry(event: string) {
-    // for (let item of this.rawData) {
-    //   if (this.currentSector === item['sector']) {
-    //     this.dataInASector.push(item);
-    //   }
-    // }
-    // this.industryList = [
-    //   ...new Set(this.dataInASector.map((item: any) => item['industry'])),
-    // ];
-    // this.currentIndustry = this.industryList[0];
-
-    // for (let item of this.dataInASector) {
-    //   if (
-    //     this.currentSector === item['sector'] &&
-    //     this.currentIndustry === item['industry']
-    //   )
-    //     this.symbolList.push(item['symbol']);
-    // }
     this.currentIndustry = this.currentIndustry === event ? undefined : event;
     this.getAllStock();
   }
@@ -264,6 +245,4 @@ export class StockInfoComponent {
     this.currentOrder = order;
     this.getAllStock();
   }
-
-  
 }

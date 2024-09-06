@@ -1,18 +1,19 @@
 import { Component, Input, input } from '@angular/core';
 import {  StockInfoComponent } from '../stock-info/stock-info.component';
 import { AllStockService } from '../../../all-stocks-service/all-stock.service';
-import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [StockInfoComponent, NgClass, NgFor, NgIf, NgStyle],
+  imports: [StockInfoComponent, NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
 })
 export class PaginationComponent {
   totalPage: number = 0;
+  page : number = 0;
   currentPage: number = 0;
   limit: number = 0;
   total: number = 0;
@@ -33,7 +34,7 @@ export class PaginationComponent {
         this.totalPage !== totalPage ||
         this.currentPage !== currentPage ||
         this.limit !== limit ||
-        this.total !== total
+        this.total !== total 
       ) {
         this.totalPage = totalPage;
         this.currentPage = currentPage;
@@ -73,12 +74,20 @@ export class PaginationComponent {
     const limit = parseInt(value, 10);
     this.allStockService.setLimit(limit);
     this.changePage(1);
+    this.currentPage = 1;
+    this.allStockService.setCurrentPage(1);
+
   }
 
   showPages(): void {
     this.pagesToShow = [];
+    
+    if(this.totalPage === 1){
+      this.pagesToShow.push(this.currentPage);
+    } 
+    
 
-    if (this.currentPage > 1) {
+    if (this.currentPage > 1 && !(this.totalPage===1) )  {
       this.pagesToShow.push(this.currentPage - 1);
     } else {
       this.pagesToShow.push(this.currentPage + 2);

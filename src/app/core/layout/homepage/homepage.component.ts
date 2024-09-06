@@ -13,6 +13,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { DashboardCanvasComponent } from '../dashboard-canvas/dashboard-canvas.component';
 import { NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { HistogramAnalysisComponent } from '../../../features/components/histogram-analysis/histogram-analysis.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -26,7 +27,7 @@ import { HistogramAnalysisComponent } from '../../../features/components/histogr
     NgClass,
     HistogramAnalysisComponent,
     NgFor,
-    NgStyle
+    NgStyle,
   ],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss',
@@ -41,14 +42,16 @@ export class HomepageComponent {
     '../../../../assets/TES5.png',
   ];
   colors: any[] = [
-    "has-background-danger-dark",
-    "has-background-warning-dark",
-    "has-background-info-dark",
-    "has-background-dark",
-    "has-background-black",
-  ]
+    'has-background-danger-dark',
+    'has-background-warning-dark',
+    'has-background-info-dark',
+    'has-background-dark',
+    'has-background-black',
+  ];
   currentIndex: number = 0;
   intervalId: any;
+
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     console.log('dc feature', this.feature);
@@ -61,11 +64,17 @@ export class HomepageComponent {
 
   onTabChange(feature: string) {
     this.feature = feature;
+    // Update URL without reloading the page
+    // this.router.navigate([], {
+    //   relativeTo: this.route,
+    //   queryParams: { feature: this.feature },
+    //   queryParamsHandling: 'merge', // Merge with existing query params
+    // });
   }
   startPresentation(): void {
     this.intervalId = setInterval(() => {
       this.currentIndex = (this.currentIndex + 1) % this.items.length;
-    }, 5000); 
+    }, 5000);
   }
 
   ngOnDestroy(): void {
