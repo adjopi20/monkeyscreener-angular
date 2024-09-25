@@ -1,7 +1,49 @@
 <div class="notification has-text-centered cell is-col-span-5">
   <h1 class="title is-align-self-center">Overview</h1>
 </div>
-<div class="columns">
+<div class="columns is-multiline">
+  <!-- <div class="container is-fluid"></div> -->
+  <!-- <h2>Index</h2> -->
+  <div class="column is-full">
+    <div class="fixed-grid has-4-cols">
+      <p class="subtitle is-5">Indices</p>
+      <div class="grid">
+        <div class="cell has-col-span-1">
+          <div class="notification">
+            <p class="is-size-5 has-text-info">{{ idx30.longName }}</p>
+            <p class="is-size-6 has-text-warning">
+              {{ idx30.previousClose | currency : "Rp" }}
+            </p>
+          </div>
+        </div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ idx80.longName}}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ idx80.previousClose | currency : "Rp" }}
+          </p></div></div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ jkse.longName }}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ jkse.previousClose | currency : "Rp" }}
+          </p></div></div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ lq45.longName }}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ lq45.previousClose | currency : "Rp" }}
+          </p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div> -->
   <div class="column is-three-quarters">
     <div class="fixed-frid has-3-cols">
       <div class="grid">
@@ -304,7 +346,8 @@
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>
@@ -359,7 +402,8 @@
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>
@@ -412,7 +456,8 @@
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>

@@ -74,6 +74,11 @@ export class OverviewComponent {
   slicedNews: any[] = [];
   slicedNewsImg: any[] = [];
 
+  jkse: any;
+  lq45: any;
+  idx30: any;
+  idx80: any;
+
   constructor(
     private apiService: FlaskApiService,
     private datePipe: DatePipe,
@@ -86,7 +91,50 @@ export class OverviewComponent {
     this.getTopGainer();
     this.getStocks();
     this.getNews();
+    this.getInfo();
   }
+
+  async getInfo() {
+    try {
+      this.idx30 = await firstValueFrom(
+        this.apiService.getStockInfo('IDX30.JK')
+      );
+      console.log("idx30",this.idx30);
+
+      this.lq45 = await firstValueFrom(
+        this.apiService.getStockInfo('^JKLQ45')
+      );
+      console.log("jkl45",this.lq45);
+
+      this.jkse = await firstValueFrom(this.apiService.getStockInfo('%5EJKSE'));
+      console.log("jkse",this.jkse);
+
+      this.idx80 = await firstValueFrom(
+        this.apiService.getStockInfo('IDX80.JK')
+      );
+      console.log("idx80",this.idx80);
+
+      
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      console.log('complete');
+      this.loadingService.loadingOff();
+    }
+  }
+  // async getInfo2() {
+  //   try {
+  //     this.lq45 = await firstValueFrom(
+  //       this.apiService.getStockList('^JKLQ45')
+  //     );
+  //     console.log("jkl452",this.lq45);
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   } finally {
+  //     console.log('complete');
+  //     this.loadingService.loadingOff();
+  //   }
+  // }
 
   async getStocks() {
     try {
@@ -136,14 +184,13 @@ export class OverviewComponent {
       // this.historical = data.data;
       console.log('historical1', this.historical.length);
 
-      this.dailyGainers = data.dailyGainers
-      this.dailyLosers = data.dailyLosers
-      this.weeklyGainers = data.weeklyGainers
-      this.weeklyLosers = data.weeklyLosers
-      this.monthlyGainers = data.monthlyGainers
-      this.monthlyLosers = data.monthlyLosers
-      this.topVolumes = data.topVolumes
-
+      this.dailyGainers = data.dailyGainers;
+      this.dailyLosers = data.dailyLosers;
+      this.weeklyGainers = data.weeklyGainers;
+      this.weeklyLosers = data.weeklyLosers;
+      this.monthlyGainers = data.monthlyGainers;
+      this.monthlyLosers = data.monthlyLosers;
+      this.topVolumes = data.topVolumes;
     } catch (error: any) {
       console.error(error);
     } finally {
