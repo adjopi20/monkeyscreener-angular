@@ -1,0 +1,5 @@
+::ng-deep app-radio.special-radio .flex-container {
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    gap: 10px; /* Adjust spacing between radio buttons */
+}

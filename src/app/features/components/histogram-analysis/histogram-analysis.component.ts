@@ -239,7 +239,5 @@ export class HistogramAnalysisComponent {
       this.histogramData = [];
       this.subscribeGroupMetric();
     }
-
-    
   }
 }

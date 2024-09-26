@@ -7,6 +7,7 @@ import { NewsDirectiveDirective } from '../../../shared/directive/news-directive
   selector: 'app-news',
   standalone: true,
   imports: [NgFor, NgIf, NgClass],
+  
   templateUrl: './news.component.html',
   styleUrl: './news.component.scss',
 })
