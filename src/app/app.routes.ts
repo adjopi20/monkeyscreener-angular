@@ -46,6 +46,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'risk-reward',
+    loadComponent: () =>
+      import('./features/components/risk-reward/risk-reward.component').then(
+        (m) => m.RiskRewardComponent
+      ),
+  },
+  {
     path: 'stock/:symbol',
     // component: StockPageComponent,
     loadComponent: () =>
