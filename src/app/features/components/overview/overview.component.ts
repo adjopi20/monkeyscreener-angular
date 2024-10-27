@@ -4,6 +4,7 @@ import {
   DecimalPipe,
   getLocaleFirstDayOfWeek,
   KeyValuePipe,
+  NgClass,
   NgFor,
   NgIf,
   PercentPipe,
@@ -32,6 +33,7 @@ import { Router, RouterLink } from '@angular/router';
     LoadingIndicatorComponent,
     LoadingComponent,
     RouterLink,
+    NgClass,
   ],
   providers: [DatePipe],
   templateUrl: './overview.component.html',
@@ -39,12 +41,13 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class OverviewComponent {
   stocks: any[] = [];
-  topGainers: any[] = [];
+  historical: any[] = [];
+  dailyGainers: any[] = [];
+  dailyLosers: any[] = [];
   weeklyGainers: any[] = [];
   weeklyLosers: any[] = [];
   monthlyGainers: any[] = [];
   monthlyLosers: any[] = [];
-  topLosers: any[] = [];
   topDividendRate: any[] = [];
   topDividendYield: any[] = [];
   topEarnings: any[] = [];
@@ -54,38 +57,101 @@ export class OverviewComponent {
   topROE: any[] = [];
   topEarningsGrowth: any[] = [];
   latestPrice: any = {};
-  isLoading: boolean = false;
+
+  allNews: any[] = [];
+  mainNews: any;
+  resolutions: any[] = [];
+  resolution: any = {};
+  relatedTickers: any[] = [];
+  mainRelatedTickers: any[] = [];
+  showAdditionalSection: boolean = true;
+  titleSizeMain: string = 'is-5';
+  subtitleSizeMain: string = 'is-5';
+  titleSizeSubMain: string = 'is-6';
+  subtitleSizeSubMain: string = 'is-6';
+
+  slicedMainNews: any[] = [];
+  slicedNews: any[] = [];
+  slicedNewsImg: any[] = [];
+
+  jkse: any;
+  lq45: any;
+  idx30: any;
+  idx80: any;
 
   constructor(
     private apiService: FlaskApiService,
     private datePipe: DatePipe,
     private loadingService: LoadingServiceService,
-    private router : Router
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.getHistoricalPrice();
+    // this.getHistoricalPrice();
+    this.getTopGainer();
     this.getStocks();
+    this.getNews();
+    this.getInfo();
   }
+
+  async getInfo() {
+    try {
+      this.idx30 = await firstValueFrom(
+        this.apiService.getStockInfo('IDX30.JK')
+      );
+      console.log("idx30",this.idx30);
+
+      this.lq45 = await firstValueFrom(
+        this.apiService.getStockInfo('^JKLQ45')
+      );
+      console.log("jkl45",this.lq45);
+
+      this.jkse = await firstValueFrom(this.apiService.getStockInfo('%5EJKSE'));
+      console.log("jkse",this.jkse);
+
+      this.idx80 = await firstValueFrom(
+        this.apiService.getStockInfo('IDX80.JK')
+      );
+      console.log("idx80",this.idx80);
+
+      
+    } catch (error: any) {
+      console.log(error);
+    } finally {
+      console.log('complete');
+      this.loadingService.loadingOff();
+    }
+  }
+  // async getInfo2() {
+  //   try {
+  //     this.lq45 = await firstValueFrom(
+  //       this.apiService.getStockList('^JKLQ45')
+  //     );
+  //     console.log("jkl452",this.lq45);
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   } finally {
+  //     console.log('complete');
+  //     this.loadingService.loadingOff();
+  //   }
+  // }
 
   async getStocks() {
     try {
       this.loadingService.loadingOn();
-      this.isLoading = true;
 
       const data = await firstValueFrom(this.apiService.getStockList());
       this.stocks = data.data;
-      console.log('stocks2', this.stocks);
 
       this.stocks.sort((a, b) => b.marketCap - a.marketCap);
       this.topDividendRate = this.stocks
         .filter((item) => item.dividendRate)
         .sort((a, b) => b.dividendRate - a.dividendRate)
-        .slice(0, 12);
+        .slice(0, 10);
       this.topDividendYield = this.stocks
         .filter((item) => item.dividendYield)
         .sort((a, b) => b.dividendYield - a.dividendYield)
-        .slice(0, 12);
+        .slice(0, 10);
       this.topMarketCaps = this.stocks
         .filter((item) => item.marketCap)
         .sort((a, b) => b.marketCap - a.marketCap)
@@ -107,155 +173,62 @@ export class OverviewComponent {
     } finally {
       console.log('complete');
       this.loadingService.loadingOff();
-      this.isLoading = false;
     }
   }
 
-  async getHistoricalPrice() {
+  async getTopGainer() {
     try {
-      this.loadingService.loadingOn();
-      this.isLoading = true;
+      console.log('getHistoricalPrice1');
 
-      const data = await firstValueFrom(
-        this.apiService.getHistoricalPrice('1mo')
-      );
-      this.stocks = data;
-      this.topGainerss();
-      this.WeeklyGainers();
-      this.MonthlyGainers();
+      const data = await firstValueFrom(this.apiService.getTopGainer('1mo'));
+      // this.historical = data.data;
+      console.log('historical1', this.historical.length);
+
+      this.dailyGainers = data.dailyGainers;
+      this.dailyLosers = data.dailyLosers;
+      this.weeklyGainers = data.weeklyGainers;
+      this.weeklyLosers = data.weeklyLosers;
+      this.monthlyGainers = data.monthlyGainers;
+      this.monthlyLosers = data.monthlyLosers;
+      this.topVolumes = data.topVolumes;
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
     } finally {
       console.log('complete');
       this.loadingService.loadingOff();
-      this.isLoading = false;
     }
   }
 
-  topGainerss() {
-    let list = [];
-    console.log('Stocks:', this.stocks);
+  getNews() {
+    this.apiService.getNews().subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.allNews = data;
+        this.slicedNews = this.allNews.slice(5);
+        this.slicedMainNews = this.allNews.slice(1, 5);
 
-    for (let item of this.stocks) {
-      const close = item.history.Close;
-      const volumes = item.history.Volume;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[dates.length - 3];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const volume = volumes[end];
-      const companyName = item.metadata.longName;
-      // if (item.metadata.symbol.toLowerCase() === )
+        this.relatedTickers = data.relatedTickers;
+        for (let item of this.allNews) {
+          if (item['thumbnail']) {
+            this.mainNews = item;
+            this.resolutions = item.thumbnail.resolutions;
+            this.resolution = this.resolutions[0] || {};
+            this.mainRelatedTickers = item.relatedTickers;
 
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-        lastDayVolume: volume,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.topGainers = sortedPercentChange.slice(0, 10);
-    this.topLosers = sortedPercentChange.slice(list.length - 10, list.length);
-
-    const sortedVolume = list.sort(
-      (a: any, b: any) => b.lastDayVolume - a.lastDayVolume
-    );
-    this.topVolumes = sortedVolume.slice(0, 12);
+            break;
+          }
+        }
+      },
+      error: (error) => console.error('Error news:', error),
+      complete: () => console.log('complete'),
+    });
   }
 
-  WeeklyGainers() {
-    let list = [];
-
-    for (let item of this.stocks) {
-      const close = item.history.Close;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[dates.length - 7];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const companyName = item.metadata.longName;
-
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.weeklyGainers = sortedPercentChange.slice(0, 10);
-    this.weeklyLosers = sortedPercentChange.slice(
-      list.length - 10,
-      list.length
-    );
-  }
-
-  MonthlyGainers() {
-    let list = [];
-
-    for (let item of this.stocks) {
-      const close = item.history.Close;
-      const volumes = item.history.Volume;
-      const dates = Object.keys(close);
-      const latest = dates[dates.length - 1];
-      const latestPrice = close[latest];
-      const start = dates[1];
-      const startPrice = close[start];
-      const end = dates[dates.length - 2];
-      const endPrice = close[end];
-      const companyName = item.metadata.longName;
-
-      const percentChange = (
-        ((endPrice - startPrice) / startPrice) *
-        100
-      ).toFixed(2);
-
-      const tes = {
-        symbol: item.metadata.symbol,
-        companyName: companyName,
-        price: latestPrice,
-        percentChange: percentChange,
-      };
-      list.push(tes);
-    }
-    const sortedPercentChange = list.sort(
-      (a: any, b: any) => b.percentChange - a.percentChange
-    );
-    this.monthlyGainers = sortedPercentChange.slice(0, 10);
-    this.monthlyLosers = sortedPercentChange.slice(
-      list.length - 10,
-      list.length
-    );
+  getImgForItem(item: any) {
+    return item.thumbnail?.resolutions || [];
   }
 
   selectStock(stock: any) {
-    // this.searchText = `${stock.company_name} (${stock.symbol})`;
-    // this.showDropdown = false;
-    // Navigate to the stock details page
     this.router.navigate(['/stock', stock.symbol]);
-    // this.searchText = ''; // Clear the search input
   }
 }

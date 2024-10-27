@@ -1,0 +1,72 @@
+<div class="container is-fluid" style="margin-top: 3rem">
+  <div class="fixed-grid has-5-cols">
+    <div class="grid">
+      <div class="notification has-text-centered cell is-col-span-5">
+        <h1 class="title is-align-self-center">Risk-Reward Analysis</h1>
+      </div>
+      <div class="cell is-row-span-3">
+        <app-dropdown
+          [label]="'Listing Board: '"
+          [currentItem]="currentListingBoard"
+          (itemEvent)="receiveSetListingBoard($event)"
+          [items]="listingBoardList"
+          groupName="listingBoardGroup"
+        ></app-dropdown>
+        <app-radio
+          class="special-radio"
+          (itemEvent)="receiveSetSector($event)"
+          [items]="sectorList"
+          [currentItem]="currentSector"
+          groupName="kontol"
+          [label]="'Sector:'"
+        ></app-radio>
+
+        <app-radio
+          class="special-radio"
+          [label]="'Industry: '"
+          [currentItem]="currentIndustry"
+          (itemEvent)="receiveSetIndustry($event)"
+          [items]="industryList"
+          groupName="listingBoardGroup"
+        >
+        </app-radio>
+      </div>
+      <div class="cell is-col-span-4 is-row-span-1">
+        <app-checkboxes
+          [items]="symbolList"
+          [currentItem]="selectedSymbols"
+          [groupName]="'symbolGroup'"
+          [label]="'Ticker:'"
+          (itemEvent)="receiveSetSymbol($event)"
+        >
+        </app-checkboxes>
+      </div>
+      <div class="cell is-col-span-4 is-row-span-4">
+        <div class="notification">
+          <table class="table overflow">
+            <thead>
+              <tr class="container top-border">
+                <th class="is-size-7">No</th>
+                <th class="is-size-7">Symbol</th>
+                <th class="is-size-7">Company Name</th>
+                <th class="is-size-7">Beta</th>
+                <th class="is-size-7">CAGR</th>
+                <th class="is-size-7">Max Drawdown</th>
+              </tr>
+            </thead>
+            <tbody class="container top-border" >
+              <tr class="container top-border"  *ngFor="let item of filteredData ; let i = index" >
+                <td class="is-size-7">{{i+1}}</td>
+                <td class="is-size-7">{{item.symbol}}</td>
+                <td class="is-size-7">{{item.company_name}}</td>
+                <td class="is-size-7">tes</td>
+                <td class="is-size-7">tes</td>
+                <td class="is-size-7">tes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -21,7 +21,7 @@ import { RouterLink } from '@angular/router';
     PaginationComponent,
     FilterContainerComponent,
     CurrencyPipe,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './stock-info.component.html',
   styleUrl: './stock-info.component.scss',
@@ -35,6 +35,8 @@ export class StockInfoComponent {
   industry: any[] = [];
   listingBoard: any[] = [];
   recommendation: any[] = [];
+
+  dataInASector: any[] = [];
 
   total: number = 0;
   currentPage: number = 1;
@@ -59,6 +61,8 @@ export class StockInfoComponent {
   currentMaxDividendRate?: number;
   currentSortBy?: string;
   currentOrder?: string;
+
+
 
   constructor(
     @SkipSelf() private apiService: FlaskApiService,
@@ -152,21 +156,19 @@ export class StockInfoComponent {
   }
 
   getFilterOptions() {
-    this.apiService
-      .getFilterOptions()
-      .subscribe({
-        next: (data: any) => {
-          this.listingBoard = data.listingBoard;
-          this.sector = data.sector;
-          this.recommendation = data.recommendationKey;
+    this.apiService.getFilterOptions().subscribe({
+      next: (data: any) => {
+        this.listingBoard = data.listingBoard;
+        this.sector = data.sector;
+        this.recommendation = data.recommendationKey;
 
-          // console.log(this.listingBoard);
-          // console.log(this.sector);
-          // console.log(this.recommendation);
-        },
-        error: (error) => console.error(error),
-        complete: () => console.log('complete'),
-      });
+        // console.log(this.listingBoard);
+        // console.log(this.sector);
+        // console.log(this.recommendation);
+      },
+      error: (error) => console.error(error),
+      complete: () => console.log('complete'),
+    });
   }
 
   limitDisplayedData() {
@@ -194,6 +196,7 @@ export class StockInfoComponent {
 
   receiveChangeSector(event: string) {
     this.currentSector = this.currentSector === event ? undefined : event;
+    
     this.getAllStock();
   }
 
@@ -247,6 +250,4 @@ export class StockInfoComponent {
     this.currentOrder = order;
     this.getAllStock();
   }
-
-  
 }

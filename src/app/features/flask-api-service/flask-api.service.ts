@@ -2,15 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { NONE_TYPE } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { catchError, delay, map, multicast, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlaskApiService {
-  private url: string = 'http://127.0.0.1:5000';
-  private infoUrl: string = 'http://127.0.0.1:5000/info/stocklist';
-  private filterOptionsUrl = 'http://127.0.0.1:5000/filter-options';
-  // private histItemUrl = 'http://127.0.0.1:5000/histogram-analysis-for-sector-2/<sector>/<metric>';
+  private url: string = environment.url;
 
   constructor(private http: HttpClient) {}
 
@@ -67,13 +65,13 @@ export class FlaskApiService {
       params = params.set('order', order);
     }
 
-    return this.http.get(this.infoUrl, {
+    return this.http.get(`${this.url}/info/stocklist`, {
       params: params,
     });
   }
 
   getFilterOptions(): Observable<any> {
-    return this.http.get(this.filterOptionsUrl);
+    return this.http.get(`${this.url}/filter-options`);
   }
 
   getHistogramItems(
@@ -91,51 +89,37 @@ export class FlaskApiService {
       params = params.set('industry', industry);
     }
     return this.http.get(
-      'http://127.0.0.1:5000/histogram-analysis-for-sector-2/' +
-        sector +
-        '/' +
-        metric,
+      `${this.url}/histogram-analysis-for-sector-2/${sector}/${metric}`,
       { params: params }
     );
   }
   //=========================================================================================
   getQIncomeStatement(symbol: string): Observable<any> {
-    return this.http.get(
-      'http://127.0.0.1:5000/financials/q-inc-stmt/' + symbol
-    );
+    return this.http.get(`${this.url}/financials/q-inc-stmt/` + symbol);
   }
   getIncomeStatement(symbol: string): Observable<any> {
-    return this.http.get('http://127.0.0.1:5000/financials/inc-stmt/' + symbol);
+    return this.http.get(`${this.url}/financials/inc-stmt/${symbol}`);
   }
 
   getQBalSheet(symbol: string): Observable<any> {
-    return this.http.get(
-      'http://127.0.0.1:5000/financials/q-balance-sheet/' + symbol
-    );
+    return this.http.get(`${this.url}/financials/q-balance-sheet/${symbol}`);
   }
 
   getBalSheet(symbol: string): Observable<any> {
-    return this.http.get(
-      'http://127.0.0.1:5000/financials/balance-sheet/' + symbol
-    );
+    return this.http.get(`${this.url}/financials/balance-sheet/${symbol}`);
   }
 
   getQCashFlow(symbol: string): Observable<any> {
-    return this.http.get(
-      'http://127.0.0.1:5000/financials/q-cash-flow/' + symbol
-    );
+    return this.http.get(`${this.url}/financials/q-cash-flow/${symbol}`);
   }
 
   getCashFlow(symbol: string): Observable<any> {
-    return this.http.get(
-      'http://127.0.0.1:5000/financials/cash-flow/' + symbol
-    );
+    return this.http.get(`${this.url}/financials/cash-flow/${symbol}`);
   }
   //=========================================================================================
-  
 
   getNews(): Observable<any> {
-    return this.http.get('http://127.0.0.1:5000/news');
+    return this.http.get(`${this.url}/news`);
   }
 
   getHistoricalPrice(
@@ -143,21 +127,24 @@ export class FlaskApiService {
     // start?: string,
     // end?: string
   ): Observable<any> {
-    return this.http.get(`http://127.0.0.1:5000/history-metadata/${period}`);
+    return this.http.get(`${this.url}/history-metadata/${period}`);
   }
 
   getStockHistoricalData(symbol: string, period: string): Observable<any> {
-    return this.http.get(
-      `http://127.0.0.1:5000/history-metadata/${symbol}/${period}`
-    );
+    return this.http.get(`${this.url}/history-metadata/${symbol}/${period}`);
   }
 
   getStockInfo(symbol: string): Observable<any> {
-    return this.http.get(`http://127.0.0.1:5000/info2/${symbol}`);
+    return this.http.get(`${this.url}/info2/${symbol}`);
   }
 
   //=========================================================================================
   getStockAction(symbol: string): Observable<any> {
-    return this.http.get(`http://127.0.0.1:5000/actions/${symbol}`);
+    return this.http.get(`${this.url}/actions/${symbol}`);
+  }
+
+  //=========================================================================================
+  getTopGainer(period: string): Observable<any> {
+    return this.http.get(`${this.url}/top-gainer/${period}`);
   }
 }

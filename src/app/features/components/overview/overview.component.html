@@ -1,18 +1,117 @@
 <div class="notification has-text-centered cell is-col-span-5">
   <h1 class="title is-align-self-center">Overview</h1>
 </div>
-<div class="columns">
+<div class="columns is-multiline">
+  <!-- <div class="container is-fluid"></div> -->
+  <!-- <h2>Index</h2> -->
+  <div class="column is-full">
+    <div class="fixed-grid has-4-cols">
+      <p class="subtitle is-5">Indices</p>
+      <div class="grid">
+        <div class="cell has-col-span-1">
+          <div class="notification">
+            <p class="is-size-5 has-text-info">{{ idx30.longName }}</p>
+            <p class="is-size-6 has-text-warning">
+              {{ idx30.previousClose | currency : "Rp" }}
+            </p>
+          </div>
+        </div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ idx80.longName}}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ idx80.previousClose | currency : "Rp" }}
+          </p></div></div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ jkse.longName }}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ jkse.previousClose | currency : "Rp" }}
+          </p></div></div>
+        <div class="cell has-col-span-1"><div class="notification"><p class="is-size-5 has-text-info">{{ lq45.longName }}</p>
+          <p class="is-size-6 has-text-warning">
+            {{ lq45.previousClose | currency : "Rp" }}
+          </p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="notification"></div>
+  </div> -->
   <div class="column is-three-quarters">
     <div class="fixed-frid has-3-cols">
       <div class="grid">
         <div class="cell is-col-span-3">
-          <app-news
-            [showAdditionalSection]="false"
-            [titleSizeMain]="'is-6'"
-            [subtitleSizeMain]="'is-7'"
-            [titleSizeSubMain]="'is-6'"
-            [subtitleSizeSubMain]="'is-7'"
-          ></app-news>
+          <div class="fixed-grid notification has-5-cols">
+            <div class="grid column is-column-gap-4">
+              <div class="cell is-col-span-3 is-row-span-5">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-5by3">
+                      <img [src]="resolution?.url" alt="Placeholder image" />
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-content">
+                        <a
+                          class="no-underline title"
+                          [ngClass]="titleSizeMain"
+                          [href]="mainNews?.link"
+                          style="text-decoration: none"
+                          >{{ mainNews?.title }}</a
+                        >
+
+                        <p
+                          class="subtitle has-text-info"
+                          [ngClass]="subtitleSizeMain"
+                        >
+                          {{ mainNews?.publisher }}@for (item of
+                          mainRelatedTickers; track $index) {
+                          <span
+                            class="tag is-space-2 is-normal is-primary is-5"
+                            >{{ item }}</span
+                          >
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngFor="let i of slicedMainNews">
+                <div class="cell is-col-span-2">
+                  <a
+                    class="title no-underline"
+                    [ngClass]="titleSizeSubMain"
+                    [href]="i?.link"
+                    style="text-decoration: none"
+                    >{{ i?.title }}</a
+                  >
+
+                  <p
+                    class="subtitle has-text-info"
+                    [ngClass]="subtitleSizeSubMain"
+                  >
+                    {{ i?.publisher }} @for (item of i.relatedTickers; track
+                    $index) {
+                    <span class="tag is-normal is-primary is-5">{{
+                      item
+                    }}</span>
+                    }
+                  </p>
+
+                  <hr class="new1" />
+                </div>
+              </ng-container>
+            </div>
+          </div>
         </div>
         <div class="cell is-row-start-2 is-col-span-1">
           <div class="notification">
@@ -22,7 +121,13 @@
               <div class="column is-half" *ngFor="let item of topDividendRate">
                 <div class="container left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info " routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       Rp{{ item.dividendRate }}
                     </p>
@@ -44,7 +149,13 @@
               <div class="column is-half" *ngFor="let item of topDividendYield">
                 <div class="container is-loading left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       {{ item.dividendYield | percent : "1.0-2" }}
                     </p>
@@ -71,7 +182,8 @@
                     <p
                       class="is-size-7 has-text-info"
                       style="margin-right: 1rem"
-                      routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
                     >
                       {{ item.symbol }}
                     </p>
@@ -99,7 +211,13 @@
               <div class="column is-one-third" *ngFor="let item of topVolumes">
                 <div class="container left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       {{ item.price | currency : "Rp" }}
                     </p>
@@ -123,7 +241,13 @@
               <div class="column is-one-quarter" *ngFor="let item of topROE">
                 <div class="container left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       {{ item.returnOnEquity | number }}
                     </p>
@@ -144,7 +268,13 @@
               <div class="column is-one-quarter" *ngFor="let item of topEPS">
                 <div class="container left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       {{ item.trailingEps | number }}
                     </p>
@@ -168,7 +298,13 @@
               >
                 <div class="container left-border">
                   <div class="is-flex is-justify-content-space-between">
-                    <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                    <p
+                      class="is-size-7 has-text-info"
+                      routerLinkActive="router-link-active"
+                      [routerLink]="['/stock', item.symbol]"
+                    >
+                      {{ item.symbol }}
+                    </p>
                     <p class="is-size-7 has-text-warning">
                       {{ item.earningsGrowth | number }}
                     </p>
@@ -193,19 +329,25 @@
             <!-- @if (isLoading==false) { -->
             <h1 class="subtitle is-6">Top Gainers</h1>
             <div class="columns is-multiline">
-              <div class="column is-half" *ngFor="let item of topGainers">
+              <div class="column is-half" *ngFor="let item of dailyGainers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
                   <!-- <span
                   class="tag is-normal is-7"
                   [ngClass]="setColorListingBoard(item.listing_board)"
                   >{{ item.listing_board }}</span
                 > -->
-                  <p class="is-size-7 truncated">{{ item.companyName }}</p>
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>
@@ -220,10 +362,15 @@
 
             <h1 class="subtitle is-6">Top Losers</h1>
             <div class="columns is-multiline">
-              <div class="column is-half" *ngFor="let item of topLosers">
+              <div class="column is-half" *ngFor="let item of dailyLosers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
-                  <p class="is-size-7 truncated">{{ item.companyName }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-danger">
@@ -244,12 +391,19 @@
             <div class="columns is-multiline">
               <div class="column is-half" *ngFor="let item of weeklyGainers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
                   <p class="is-size-7 truncated">{{ item.companyName }}</p>
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>
@@ -263,7 +417,13 @@
             <div class="columns is-multiline">
               <div class="column is-half" *ngFor="let item of weeklyLosers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
                   <p class="is-size-7 truncated">{{ item.companyName }}</p>
 
                   <div class="is-flex is-justify-content-space-between">
@@ -285,12 +445,19 @@
             <div class="columns is-multiline">
               <div class="column is-half" *ngFor="let item of monthlyGainers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
                   <p class="is-size-7 truncated">{{ item.companyName }}</p>
 
                   <div class="is-flex is-justify-content-space-between">
                     <p class="is-size-7 has-text-success">
-                      <i class="fas fa-caret-up"></i> {{ item.percentChange }}%
+                      <i class="fas fa-caret-up"></i>
+                      {{ item.percentChange }}%
                     </p>
                     <p class="is-size-7 has-text-warning">Rp{{ item.price }}</p>
                   </div>
@@ -304,7 +471,13 @@
             <div class="columns is-multiline">
               <div class="column is-half" *ngFor="let item of monthlyLosers">
                 <div class="container left-border">
-                  <p class="is-size-7 has-text-info" routerLinkActive="router-link-active" [routerLink]="['/stock',item.symbol]">{{ item.symbol }}</p>
+                  <p
+                    class="is-size-7 has-text-info"
+                    routerLinkActive="router-link-active"
+                    [routerLink]="['/stock', item.symbol]"
+                  >
+                    {{ item.symbol }}
+                  </p>
                   <p class="is-size-7 truncated">{{ item.companyName }}</p>
 
                   <div class="is-flex is-justify-content-space-between">

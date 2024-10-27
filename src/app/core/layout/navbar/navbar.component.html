@@ -96,22 +96,28 @@
       [class.is-active]="showDropdown"
     >
       <div class="dropdown-content" *ngIf="showDropdown">
-        <div
-          class="dropdown-item"
-          *ngFor="let item of filteredData"
-          
-        >
+        <div class="dropdown-item" *ngFor="let item of filteredData">
           <a (click)="selectStock(item)"
-            ><p class="is-size-6 has-text-primary" appSearch
-            [searchedWord]="searchText"
-            [content]="item.symbol"
-            [classToApply]="'has-text-weight-bold'"
-            [setTitle]="true">{{ item.symbol }}</p>
-            <p class="is-size-7 has-text-info" appSearch
-            [searchedWord]="searchText"
-            [content]="item.company_name"
-            [classToApply]="'has-text-weight-bold'"
-            [setTitle]="true">{{ item.company_name }}</p>
+            ><p
+              class="is-size-6 has-text-primary"
+              appSearch
+              [searchedWord]="searchText"
+              [content]="item.symbol"
+              [classToApply]="'has-text-weight-bold'"
+              [setTitle]="true"
+            >
+              {{ item.symbol }}
+            </p>
+            <p
+              class="is-size-7 has-text-info"
+              appSearch
+              [searchedWord]="searchText"
+              [content]="item.company_name"
+              [classToApply]="'has-text-weight-bold'"
+              [setTitle]="true"
+            >
+              {{ item.company_name }}
+            </p>
           </a>
           <!-- <hr class="dropdown-divider" /> -->
         </div>
@@ -133,20 +139,25 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" [routerLink]="'/'"> Home </a>
+      <a class="navbar-item has-text-navy" routerLink="news"> News </a>
+      <a class="navbar-item has-text-primary" routerLink="/info"> Stocks </a>
+      <a class="navbar-item has-text-warning" routerLink="/histogram-analysis">
+        Comparison
+      </a>
+      <a class="navbar-item has-text-purple" routerLink="/financials"> Financials </a>
 
-      <a class="navbar-item" routerLink="about-us"> About Us </a>
+      <a class="navbar-item has-text-crimson" routerLink="about-us"> About Us </a>
 
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link"> More </a>
+        <!-- <a class="navbar-link"> More </a> -->
 
-        <div class="navbar-dropdown">
+        <!-- <div class="navbar-dropdown">
           <a class="navbar-item" routerLink="/"> Home </a>
-          <!-- <a class="navbar-item is-selected"> Jobs </a> -->
-          <!-- <a class="navbar-item"> Contact </a> -->
+          <a class="navbar-item is-selected" routerLink="/"> All Stocks </a>
+          <a class="navbar-item"> Contact </a>
           <hr class="navbar-divider" />
           <a class="navbar-item" routerLink="/"> There is nothing more here sir, go back 'Home' </a>
-        </div>
+        </div> -->
       </div>
     </div>
 

@@ -93,6 +93,7 @@ export class StockPageComponent {
           this.companyOfficers = item.companyOfficers;
           const dataTable = this.convertToPieChart(this.stockInfo);
           const title = `Holders Percentage of ${this.name}`;
+          this.holdersChart=[];
           this.holdersChart.push({ title, dataTable });
           break;
         }
@@ -127,6 +128,7 @@ export class StockPageComponent {
     if (data) {
       const title = `Price of ${this.name} for ${period}`;
       const dataTable = this.convertToLineChart(data);
+      this.priceChart = [];
       this.priceChart.push({ title, dataTable });
       console.log('price chart: ', this.priceChart);
 
@@ -208,7 +210,6 @@ export class StockPageComponent {
 
   async getIncomeStatement() {
     try {
-      // this.IncStmtChart = []; // Clear previous data
       let data: any = [];
 
       if (this.finPeriod === 'quarterly') {
@@ -226,6 +227,7 @@ export class StockPageComponent {
       if (data) {
         const title = `Income Statement`;
         const dataTable = this.fs.convertToChartIncStmt(data, this.symbol);
+        this.IncStmtChart = [];
         this.IncStmtChart.push({ title, dataTable });
         console.log('data table: ', dataTable);
       } else {
@@ -253,6 +255,7 @@ export class StockPageComponent {
       if (data) {
         const title = `Balance Sheet`;
         const dataTable = this.fs.convertToChartBalSh(data, this.symbol);
+        this.BalSheetChart = [];
         this.BalSheetChart.push({ title, dataTable });
         console.log('data table: ', dataTable);
       } else {
@@ -294,6 +297,7 @@ export class StockPageComponent {
         console.log('name:: ', this.name);
 
         const dataTable = this.fs.convertToChartCashFlow(data, this.symbol);
+        this.CashFlowChart = [];
         this.CashFlowChart.push({ title, dataTable });
         console.log('data table: ', dataTable);
       } else {
@@ -320,6 +324,7 @@ export class StockPageComponent {
       if (dividends) {
         const title = `Dividends`;
         const dataTable = this.convertToBarChartDividends(dividends);
+        this.DividendsChart = [];
         this.DividendsChart.push({ title, dataTable });
         console.log('data table: ', dataTable);
       } else {
@@ -328,6 +333,7 @@ export class StockPageComponent {
       if (stockSplit) {
         const title = `Stock Splits`;
         const dataTable = this.convertToBarChartStockSplits(stockSplit);
+        this.StockSplitsChart = [];
         this.StockSplitsChart.push({ title, dataTable });
         console.log('stock split: ', dataTable);
       } else {
