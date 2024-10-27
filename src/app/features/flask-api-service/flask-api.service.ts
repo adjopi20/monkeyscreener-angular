@@ -147,4 +147,9 @@ export class FlaskApiService {
   getTopGainer(period: string): Observable<any> {
     return this.http.get(`${this.url}/top-gainer/${period}`);
   }
+
+  //=========================================================================================
+  getRiskReward(symbol: string, period: string): Observable<any> {
+    return this.http.get(`${this.url}/risk-reward/${symbol}/${period}`);
+  }
 }

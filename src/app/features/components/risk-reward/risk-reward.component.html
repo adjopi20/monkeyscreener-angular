@@ -49,19 +49,32 @@
                 <th class="is-size-7">No</th>
                 <th class="is-size-7">Symbol</th>
                 <th class="is-size-7">Company Name</th>
+                <th class="is-size-7">Volatility</th>
                 <th class="is-size-7">Beta</th>
                 <th class="is-size-7">CAGR</th>
                 <th class="is-size-7">Max Drawdown</th>
+                <th class="is-size-7">Alpha</th>
+                <th class="is-size-7">Benchmark</th>
               </tr>
             </thead>
-            <tbody class="container top-border" >
-              <tr class="container top-border"  *ngFor="let item of filteredData ; let i = index" >
-                <td class="is-size-7">{{i+1}}</td>
-                <td class="is-size-7">{{item.symbol}}</td>
-                <td class="is-size-7">{{item.company_name}}</td>
-                <td class="is-size-7">tes</td>
-                <td class="is-size-7">tes</td>
-                <td class="is-size-7">tes</td>
+            <tbody class="container top-border">
+              <tr
+                class="container top-border"
+                *ngFor="let item2 of riskRewardData; let j = index"
+              >
+                <td class="is-size-7">{{ j + 1 }}</td>
+                <td class="is-size-7">{{ item2.symbol }}</td>
+                <td class="is-size-7">{{ item2.company_name }}</td>
+                <td class="is-size-7">
+                  {{ item2.volatility | percent : "1.3-3" }}
+                </td>
+                <td class="is-size-7">{{ item2.beta | number : "1.3-3" }}</td>
+                <td class="is-size-7">{{ item2.cagr | percent : "1.3-3" }}</td>
+                <td class="is-size-7">
+                  {{ item2.max_drawdown | percent : "1.3-3" }}
+                </td>
+                <td class="is-size-7">{{ item2.alpha | number : "1.3-3" }}</td>
+                <td class="is-size-7">IHSG</td>
               </tr>
             </tbody>
           </table>

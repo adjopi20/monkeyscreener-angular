@@ -4,7 +4,7 @@ import { FlaskApiService } from '../../flask-api-service/flask-api.service';
 import { DropdownComponent } from '../../../shared/component/dropdown/dropdown.component';
 import { RadioComponent } from '../../../shared/component/radio/radio.component';
 import { CheckboxesComponent } from '../../../shared/component/checkboxes/checkboxes.component';
-import { NgFor } from '@angular/common';
+import { DecimalPipe, NgFor, PercentPipe } from '@angular/common';
 import { FilterBySymbolPipe } from '../../../shared/pipe/filterBySymbol/filter-by-symbol.pipe';
 
 @Component({
@@ -15,6 +15,8 @@ import { FilterBySymbolPipe } from '../../../shared/pipe/filterBySymbol/filter-b
     RadioComponent,
     CheckboxesComponent,
     NgFor,
+    DecimalPipe,
+    PercentPipe,
     FilterBySymbolPipe,
   ],
   templateUrl: './risk-reward.component.html',
@@ -36,6 +38,7 @@ export class RiskRewardComponent {
   rawData: any[] = [];
   filteredData: any[] = [];
 
+  riskRewardData: any[] = [];
 
   constructor(
     private apiService: FlaskApiService,
@@ -49,8 +52,6 @@ export class RiskRewardComponent {
     try {
       const data = await firstValueFrom(this.apiService.getStockList());
       this.rawData = data.data;
-      console.log('rawdata', this.rawData);
-
 
       const filter = await firstValueFrom(this.apiService.getFilterOptions());
       this.sectorList = filter.sector.filter((item: any) => item !== 'Unknown');
@@ -83,14 +84,32 @@ export class RiskRewardComponent {
         this.currentSymbol = this.symbolList[0];
         this.selectedSymbols.push(this.currentSymbol);
       }
-      console.log("selected symbol",this.selectedSymbols);
-      this.filterData(); // Call filter after data is fetched
+      // console.log("selected symbol",this.selectedSymbols);
+      this.filterData(); 
 
-      
+      this.getRiskReward();
     } catch (error) {
       console.error(error);
     } finally {
       console.log('complete');
+    }
+  }
+
+  async getRiskReward() {
+    try {
+      this.riskRewardData = [];
+
+      for (let item of this.selectedSymbols) {
+        const data = await firstValueFrom(
+          this.apiService.getRiskReward(item, '5y')
+        );
+
+        if (!this.riskRewardData.some((entry) => entry.symbol === item)) {
+          this.riskRewardData.push(data);
+        }
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -149,22 +168,22 @@ export class RiskRewardComponent {
   }
 
   receiveSetSymbol(event: string) {
-    // this.selectedSymbol = [];
-    this.currentSymbol = event;
     this.filterData();
-    // this.selectedSymbol.push(event);
+    this.selectedSymbols.push(event);
+    this.getRiskReward();
+    // this.getStockList();
     console.log('selectedSymbol: ', this.selectedSymbols);
   }
 
   // Filter the data manually
   filterData() {
     if (!this.selectedSymbols || this.selectedSymbols.length === 0) {
-      this.filteredData = this.rawData; // Show all data if no symbols are selected
+      this.filteredData = this.rawData; 
     } else {
-      this.filteredData = this.rawData.filter(item => 
+      this.filteredData = this.rawData.filter((item) =>
         this.selectedSymbols.includes(item.symbol)
       );
     }
-    console.log("Filtered Data:", this.filteredData);
+    console.log('Filtered Data:', this.filteredData);
   }
 }

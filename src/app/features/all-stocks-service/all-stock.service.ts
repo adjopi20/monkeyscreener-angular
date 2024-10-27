@@ -49,8 +49,7 @@ export class AllStockService {
   getTotal(): number{
     return this.totalSubject.value
   }
-
-
+  
 
 
 }
